@@ -7,7 +7,8 @@
                        xmlns:controls="clr-namespace:ToDoApp.Mobile.Controls"
                        xmlns:models="clr-namespace:ToDoApp.Mobile.Models"
                        x:Class="ToDoApp.Mobile.Views.ToDoListPage"
-                       x:DataType="viewmodels:ToDoListViewModel" >
+                       x:DataType="viewmodels:ToDoListViewModel">
+    <pages:BaseContentPage.Content>
         <Grid>
             <Grid RowDefinitions="1*,9*">
                 <Grid
@@ -27,26 +28,45 @@
                         VerticalOptions="Center"
                         HorizontalOptions="End"
                         CornerRadius="20"
-                        Command="{Binding LoadToDoListCommand}"/>
+                        Command="{Binding AddToDoCommand}" />
                 </Grid>
-                <CollectionView
+                <RefreshView
                     Grid.Row="1"
-                    x:Name="CollectionViewToDoList"
-                    SelectionMode="None"
-                    ItemsSource="{Binding ToDoList}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:ToDoItem">
-                            <Grid ColumnDefinitions="9*,1*">
-                                <VerticalStackLayout
-                                    Grid.Column="0">
-                                    <Label Text="{Binding Title}" FontSize="16" />
-                                    <Label Text="{Binding DisplayCreatedAtDate}" FontSize="12" FontAttributes="Italic" />
-                                    <Label Text="{Binding DisplayPriority}" FontSize="12" FontAttributes="Bold"  />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                    IsRefreshing="{Binding IsBusy}"
+                    Command="{Binding RefreshToDoListCommand}"
+                    RefreshColor="{DynamicResource PrimaryFpTheme}">
+                    <CollectionView
+                        x:Name="CollectionViewToDoList"
+                        SelectionMode="None"
+                        ItemsSource="{Binding ToDoList}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ToDoItem">
+                                <ContentView
+                                    BackgroundColor="WhiteSmoke"
+                                    Padding="9">
+                                    <Grid
+                                        Padding="9"
+                                        ColumnDefinitions="9*,1*"
+                                        BackgroundColor="White">
+                                        <VerticalStackLayout
+                                            Grid.Column="0">
+                                            <Label Text="{Binding Title}" FontSize="16" />
+                                            <Label Text="{Binding DisplayCreatedAtDate}" FontSize="12"
+                                                   FontAttributes="Italic" />
+                                            <Label Text="{Binding DisplayPriority}" FontSize="12" FontAttributes="Bold" />
+                                        </VerticalStackLayout>
+                                        <Switch
+                                            Grid.Column="1"
+                                            IsToggled="True"
+                                            OnColor="{DynamicResource PrimaryFpTheme}"
+                                            ThumbColor="Gray" />
+
+                                    </Grid>
+                                </ContentView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </RefreshView>
             </Grid>
             <controls:TDLoaderView
                 IsLoadingEnabled="{Binding IsBusy}"
@@ -54,4 +74,5 @@
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill" />
         </Grid>
+    </pages:BaseContentPage.Content>
 </pages:BaseContentPage>
