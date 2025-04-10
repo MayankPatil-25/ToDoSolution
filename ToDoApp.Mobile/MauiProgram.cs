@@ -5,6 +5,7 @@ using ToDoApp.Mobile.Views;
 using CommunityToolkit.Maui;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using ToDoApp.Mobile.Services;
 
 namespace ToDoApp.Mobile;
 
@@ -25,11 +26,17 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
+        builder.Services.AddSingleton<App>();
+        
         // Registering HttpClient and Services
         builder.Services.AddSingleton<HttpClient>();
+        builder.Services.AddSingleton<IToDoService, ToDoService>();
+        
         builder.Services.AddSingleton<ToDoListPage>();
         builder.Services.AddTransient<ToDoListViewModel>();
+        
+        builder.Services.AddTransient<AddToDoPage>();
+        builder.Services.AddSingleton<AddToDoViewModel>();
         
         return builder.Build();
     }

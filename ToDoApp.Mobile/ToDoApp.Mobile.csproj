@@ -8,7 +8,7 @@
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
+        
         <!-- Display name -->
         <ApplicationTitle>ToDoApp.Mobile</ApplicationTitle>
 
@@ -18,8 +18,13 @@
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
-        <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+        <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
         <SupportedOSPlatformVersion>21.0</SupportedOSPlatformVersion>
+        <!-- Speeds up debug builds -->
+        <DebugType>portable</DebugType>
+        <RunAOTCompilation>false</RunAOTCompilation>
+        <PublishTrimmed>false</PublishTrimmed>
+        <UseInterpreter>false</UseInterpreter>
     </PropertyGroup>
 
     <ItemGroup>
@@ -45,9 +50,6 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0"/>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>

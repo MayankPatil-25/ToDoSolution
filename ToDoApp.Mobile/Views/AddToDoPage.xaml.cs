@@ -9,14 +9,9 @@ namespace ToDoApp.Mobile.Views;
 
 public partial class AddToDoPage : BaseContentPage
 {
-    public AddToDoPage()
+    public AddToDoPage(AddToDoViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = new AddToDoViewModel();
-    }
-
-    private void DatePicker_OnDateSelected(object? sender, DateChangedEventArgs e)
-    {
-        
+        BindingContext = viewModel;
     }
 }

@@ -6,15 +6,17 @@ namespace ToDoApp.Mobile;
 
 public partial class App : Application
 {
-    private readonly ToDoListPage _page;
-    public App(ToDoListPage page)
+    public static IServiceProvider Services { get; private set; }
+
+    public App(IServiceProvider services)
     {
         InitializeComponent();
-        _page = page;
+        Services = services;
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        return new Window(new NavigationPage(_page));
+        var page = Services.GetRequiredService<ToDoListPage>();
+        return new Window(new NavigationPage(page));
     }
 }

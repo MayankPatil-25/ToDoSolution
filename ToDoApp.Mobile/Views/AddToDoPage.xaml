@@ -5,73 +5,72 @@
                        xmlns:viewmodels="clr-namespace:ToDoApp.Mobile.ViewModels"
                        xmlns:pages="clr-namespace:ToDoApp.Mobile.Views"
                        xmlns:controls="clr-namespace:ToDoApp.Mobile.Controls"
-                       xmlns:models="clr-namespace:ToDoApp.Mobile.Models"
-                       xmlns:common="clr-namespace:ToDoApp.Mobile.Common"
+                       xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                        x:Class="ToDoApp.Mobile.Views.AddToDoPage"
                        x:DataType="viewmodels:AddToDoViewModel">
-    <ContentPage.Content>
-        <Grid>
-            <Grid RowDefinitions="1*,8*,1*">
-                <Grid
-                    BackgroundColor="{DynamicResource PrimaryFpTheme}"
-                    Grid.Row="0">
-                    <Label
-                        Text="Todo List"
-                        FontSize="26"
-                        FontAttributes="Bold"
-                        Padding="10,5"
-                        VerticalTextAlignment="Center"
-                        TextColor="WhiteSmoke" />
-                </Grid>
-                <VerticalStackLayout
-                    Grid.Row="1"
-                    Spacing="15"
-                    Margin="15">
-                    <Label
-                        Text="Title"
-                        FontSize="16"
-                        FontAttributes="Bold" />
-                    <Entry
-                        ReturnType="Done"
-                        Text="{Binding ToDoTitle, Mode=TwoWay}" />
-                    <Label
-                        Text="Description"
-                        FontSize="16"
-                        FontAttributes="Bold" />
-                    <Entry
-                        ReturnType="Done" 
-                        Text="{Binding ToDoDescription, Mode=TwoWay}" />/>
-                    <Label
-                        Text="Priority"
-                        FontSize="16"
-                        FontAttributes="Bold" />
-                    <Picker
-                        SelectedItem="{Binding TodoPriority}"
-                        ItemsSource="{Binding PriorityItems}" />
-                    <Label
-                        Text="Due Date"
-                        FontSize="16"
-                        FontAttributes="Bold" />
-                    <DatePicker
-                        Format="D"
-                        Date="{Binding DueDate, Mode=TwoWay}"
-                        DateSelected="DatePicker_OnDateSelected" />
-                </VerticalStackLayout>
-                <Button
-                    Grid.Row="2"
-                    Text="Submit"
-                    CornerRadius="5"
-                    BackgroundColor="{DynamicResource PrimaryFpTheme}"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="18"
-                    Margin="15"/>
-            </Grid>
-            <controls:TDLoaderView
-                IsLoadingEnabled="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
-                HorizontalOptions="Fill"
-                VerticalOptions="Fill" />
+    <Grid RowDefinitions="1*,8*,1*">
+        <Grid
+            BackgroundColor="{DynamicResource PrimaryFpTheme}"
+            Grid.Row="0">
+            <Label
+                Text="Todo List"
+                FontSize="26"
+                FontAttributes="Bold"
+                Padding="10,5"
+                VerticalTextAlignment="Center"
+                TextColor="WhiteSmoke" />
         </Grid>
-    </ContentPage.Content>
+        <VerticalStackLayout
+            Grid.Row="1"
+            Spacing="15"
+            Margin="15">
+            <Label
+                Text="Title"
+                FontSize="16"
+                FontAttributes="Bold" />
+            <Entry
+                ReturnType="Done"
+                Text="{Binding ToDoTitle, Mode=TwoWay}" />
+            <Label
+                Text="Description"
+                FontSize="16"
+                FontAttributes="Bold" />
+            <Editor
+                AutoSize="TextChanges"
+                Text="{Binding ToDoDescription, Mode=TwoWay}" />
+            <Label
+                Text="Priority"
+                FontSize="16"
+                FontAttributes="Bold" />
+            <Picker
+                SelectedItem="{Binding TodoPriority}"
+                ItemsSource="{Binding PriorityItems}" />
+            <Label
+                Text="Due Date"
+                FontSize="16"
+                FontAttributes="Bold" />
+            <DatePicker
+                x:Name="PickerDueDate"
+                Format="D"
+                MinimumDate="{Binding MinDate}"
+                Date="{Binding DueDate, Mode=TwoWay}">
+                <DatePicker.Behaviors>
+                    <toolkit:EventToCommandBehavior
+                        EventName="DateSelected"
+                        Command="{Binding DateSelectedCommand}"
+                        CommandParameter="{Binding Source={x:Reference PickerDueDate}, Path=Date}" />
+                </DatePicker.Behaviors>
+            </DatePicker>
+        </VerticalStackLayout>
+        <Button
+            Grid.Row="2"
+            Text="Submit"
+            CornerRadius="5"
+            BackgroundColor="{DynamicResource PrimaryFpTheme}"
+            TextColor="White"
+            FontAttributes="Bold"
+            FontSize="18"
+            Margin="15"
+            Command="{Binding CreateToDoCommand}" />
+    </Grid>
 </pages:BaseContentPage>

@@ -1,10 +1,8 @@
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls;
+using Java.Util.Concurrent;
 
 namespace ToDoApp.Mobile.ViewModels;
-
 
 public abstract partial class BaseViewModel: INotifyPropertyChanged
 {
@@ -58,5 +56,17 @@ public abstract partial class BaseViewModel: INotifyPropertyChanged
     protected virtual void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    protected async Task DisplayPopup(string title, string message, string button = "Ok")
+    {
+        await App.Current?.MainPage?.DisplayAlert(title, message, button);
+    }
+
+    protected Task Navigate<TPage>() where TPage : ContentPage
+    {
+        var page = App.Services?.GetRequiredService<TPage>();
+        if (page == null) return Task.CompletedTask;
+        return App.Current.MainPage.Navigation.PushAsync(page);
     }
 }

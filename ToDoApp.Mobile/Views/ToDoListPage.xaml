@@ -32,7 +32,7 @@
                 </Grid>
                 <RefreshView
                     Grid.Row="1"
-                    IsRefreshing="{Binding IsBusy}"
+                    IsRefreshing="{Binding IsRefreshing}"
                     Command="{Binding RefreshToDoListCommand}"
                     RefreshColor="{DynamicResource PrimaryFpTheme}">
                     <CollectionView
