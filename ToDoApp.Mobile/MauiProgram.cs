@@ -1,10 +1,7 @@
-﻿using System.Net.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using ToDoApp.Mobile.ViewModels;
 using ToDoApp.Mobile.Views;
 using CommunityToolkit.Maui;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using ToDoApp.Mobile.Services;
 
 namespace ToDoApp.Mobile;
@@ -26,16 +23,19 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
+        // Registering App singleton to get the Services object ready to access at the earliest.
         builder.Services.AddSingleton<App>();
         
         // Registering HttpClient and Services
         builder.Services.AddSingleton<HttpClient>();
         builder.Services.AddSingleton<IToDoService, ToDoService>();
         
+        // Registering Views/Pages
         builder.Services.AddSingleton<ToDoListPage>();
-        builder.Services.AddTransient<ToDoListViewModel>();
-        
         builder.Services.AddTransient<AddToDoPage>();
+        
+        // Registering ViewModels
+        builder.Services.AddTransient<ToDoListViewModel>();
         builder.Services.AddSingleton<AddToDoViewModel>();
         
         return builder.Build();

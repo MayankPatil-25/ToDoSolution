@@ -12,7 +12,8 @@ public partial class AddToDoViewModel : BaseViewModel
     public AddToDoViewModel(IToDoService service)
     {
         _service = service;
-        PriorityItems = Enum.GetNames(typeof(ToDoPriority)).ToList();
+        PriorityItems = Enum.GetValues(typeof(ToDoPriority)).Cast<ToDoPriority>().ToList();
+        
     }
 
     protected override void OnAppearing()

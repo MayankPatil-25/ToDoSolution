@@ -5,7 +5,7 @@ namespace ToDoApp.Mobile.Services;
 
 public class ToDoService: IToDoService
 {
-    private const string BaseUrl = "http://localhost:5270/api/todo";
+    private const string BaseUrl = "http://10.0.2.2:5270/api/todo";
     private readonly HttpClient _httpClient;
     
     public ToDoService(HttpClient httpClient)
@@ -17,7 +17,8 @@ public class ToDoService: IToDoService
     {
         try
         {
-            return await _httpClient.GetFromJsonAsync<List<ToDoItem>>(BaseUrl) ?? new List<ToDoItem>();
+            var response = await _httpClient.GetFromJsonAsync<List<ToDoItem>>(BaseUrl) ?? new List<ToDoItem>();
+            return response;
         }
         catch (HttpRequestException)
         {

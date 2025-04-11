@@ -43,8 +43,9 @@
                 FontSize="16"
                 FontAttributes="Bold" />
             <Picker
-                SelectedItem="{Binding TodoPriority}"
-                ItemsSource="{Binding PriorityItems}" />
+                SelectedItem="{Binding TodoPriority, Mode=TwoWay}"
+                ItemsSource="{Binding PriorityItems}">
+            </Picker>
             <Label
                 Text="Due Date"
                 FontSize="16"

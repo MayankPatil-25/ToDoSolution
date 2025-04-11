@@ -60,8 +60,8 @@ public partial class AddToDoViewModel
         }
     }
     
-    private List<string> _priorityItems;
-    public List<string> PriorityItems
+    private List<ToDoPriority> _priorityItems;
+    public List<ToDoPriority> PriorityItems
     {
         get => _priorityItems;
         set

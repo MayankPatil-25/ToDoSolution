@@ -72,7 +72,6 @@ public partial class ToDoListViewModel: BaseViewModel
         //     new ToDoItem(11, "Email Assignment", DateTime.Today, priority:ToDoPriority.High)
         // ];
         
-        await Task.Delay(5000);
         IsRefreshing = false;
         IsBusy = false;
     }
