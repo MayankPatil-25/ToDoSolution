@@ -43,10 +43,11 @@ public class ToDoRepository: IToDoRepository
             savedToDoItem.Title = todoItem.Title;
         
         if (!string.IsNullOrEmpty(todoItem.Description))
-            savedToDoItem.Title = todoItem.Description;
-        
+            savedToDoItem.Description = todoItem.Description;
+
+        savedToDoItem.Priority = todoItem.Priority;
         savedToDoItem.IsCompleted = todoItem.IsCompleted;
-        
+        savedToDoItem.DueDate = todoItem.DueDate;
         savedToDoItem.UpdatedAt = DateTime.UtcNow;
         
         _context.Update(savedToDoItem);

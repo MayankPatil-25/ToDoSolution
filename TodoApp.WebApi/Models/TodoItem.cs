@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using TodoApp.WebApi.Common;
+using Enum = TodoApp.WebApi.Common;
 
 namespace TodoApp.WebApi.Models;
 
@@ -22,7 +23,6 @@ public class ToDoItem
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-    
     
     public DateTime? DueDate { get; set; }
 }

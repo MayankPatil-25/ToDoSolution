@@ -16,17 +16,25 @@ public partial class AddToDoViewModel : BaseViewModel
         _service = service;
         PriorityItems = Enum.GetValues(typeof(ToDoPriority)).Cast<ToDoPriority>().ToList();
         PageTitle = "Add ToDo";
+        ButtonSubmitTitle = "Submit";
+        DueDate = MinDate;
     }
 
     public void NavigateData(ToDoItem selectedItem)
     {
         PageTitle = "Update ToDo";
+        ButtonSubmitTitle = "Update";
         _isUpdatePage = true;
         _selectedToDoItem = selectedItem;
         ToDoTitle = selectedItem.Title;
         ToDoDescription = selectedItem.Description;
         DueDate = selectedItem.DueDate;
-        TodoPriority = selectedItem.Priority;
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        TodoPriority = _selectedToDoItem?.Priority ?? ToDoPriority.Low;
     }
 
     [RelayCommand]
@@ -97,7 +105,7 @@ public partial class AddToDoViewModel : BaseViewModel
             return false;
         }
 
-        if (DueDate == null || DueDate <= MinDate)
+        if (DueDate == null)
         {
             await DisplayPopup("Alert", "Please select a valid date.");
             return false;

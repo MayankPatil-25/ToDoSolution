@@ -11,7 +11,7 @@
                        x:DataType="viewmodels:ToDoListViewModel">
     <pages:BaseContentPage.Content>
         <Grid>
-            <Grid RowDefinitions="1*,9*">
+            <Grid RowDefinitions="1*,8.5*,0.5*">
                 <Grid
                     BackgroundColor="{DynamicResource PrimaryFpTheme}"
                     Grid.Row="0">
@@ -55,8 +55,8 @@
                                     BackgroundColor="WhiteSmoke"
                                     Padding="9">
                                     <Border
-  
-                                            StrokeShape="RoundRectangle 5">
+                                        Stroke="Silver"
+                                        StrokeShape="RoundRectangle 5">
                                         <Grid
                                             IsClippedToBounds="True"
                                             ColumnDefinitions="25,*,Auto"
@@ -64,19 +64,32 @@
                                             <Grid.Behaviors>
                                                 <toolkit:TouchBehavior
                                                     LongPressCommand="{Binding Source={x:Reference CollectionViewToDoList}, Path=BindingContext.ToDoItemLongPressCommand}"
-                                                    LongPressCommandParameter="{Binding}" />
+                                                    LongPressCommandParameter="{Binding}"
+                                                    ShouldMakeChildrenInputTransparent="False"
+                                                    LongPressDuration="750" />
                                             </Grid.Behaviors>
                                             <BoxView
                                                 Grid.Column="0"
                                                 BackgroundColor="{Binding PriorityIndicator}" />
+                                            <BoxView
+                                                Grid.Column="0"
+                                                WidthRequest="1"
+                                                BackgroundColor="Silver"
+                                                VerticalOptions="Fill"
+                                                HorizontalOptions="End" />
                                             <VerticalStackLayout
                                                 Grid.Column="1"
                                                 Spacing="5"
                                                 Padding="9">
                                                 <Label Text="{Binding Title}"
-                                                       FontSize="16" />
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       MaxLines="1"
+                                                       LineBreakMode="TailTruncation" />
                                                 <Label Text="{Binding Description}"
-                                                       FontSize="13" />
+                                                       FontSize="13"
+                                                       LineBreakMode="TailTruncation"
+                                                       MaxLines="2" />
                                                 <Grid>
                                                     <Label Text="{Binding DisplayPriority}"
                                                            FontSize="11"
@@ -87,16 +100,21 @@
                                                            FontSize="11"
                                                            FontAttributes="Italic"
                                                            HorizontalOptions="End"
-                                                           HorizontalTextAlignment="End"/>
+                                                           HorizontalTextAlignment="End" />
                                                 </Grid>
                                             </VerticalStackLayout>
                                             <Switch
                                                 Margin="0,0,9,0"
                                                 Grid.Column="2"
-                                                IsToggled="True"
+                                                IsToggled="{Binding IsCompleted, Mode=TwoWay}"
                                                 OnColor="{DynamicResource PrimaryFpTheme}"
-                                                ThumbColor="Gray" />
-
+                                                ThumbColor="Gray" >
+                                                <Switch.Behaviors>
+                                                    <toolkit:TouchBehavior
+                                                        Command="{Binding Source={x:Reference CollectionViewToDoList}, Path=BindingContext.ToDoCompletionSwitchToggledCommand}"
+                                                        CommandParameter="{Binding}" />
+                                                </Switch.Behaviors>
+                                            </Switch>
                                         </Grid>
                                     </Border>
                                 </ContentView>
@@ -104,6 +122,39 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </RefreshView>
+                <Grid
+                    Grid.Row="2"
+                    BackgroundColor="FloralWhite">
+                    <BoxView
+                        HeightRequest="1"
+                        BackgroundColor="Gray"
+                        VerticalOptions="Start"
+                        HorizontalOptions="Fill" />
+                    <HorizontalStackLayout
+                        Spacing="15"
+                        HorizontalOptions="Center">
+                        <Label 
+                            Text="Filters:"
+                            FontAttributes="Bold"
+                            FontSize="14" 
+                            TextColor="Black"
+                            VerticalOptions="Center"/>
+                        <Picker 
+                            x:Name="PickerFilters"
+                            FontSize="14"
+                            SelectedItem="{Binding SelectedFilter}"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            ItemsSource="{Binding FilterOptions}">
+                            <Picker.Behaviors>
+                                <toolkit:EventToCommandBehavior 
+                                    EventName="SelectedIndexChanged"
+                                    Command="{Binding FilterToDoListCommand}"
+                                    CommandParameter="{Binding Source={x:Reference PickerFilters}, Path=SelectedIndex}" />
+                            </Picker.Behaviors>
+                        </Picker>
+                    </HorizontalStackLayout>
+                </Grid>
             </Grid>
             <controls:TDLoaderView
                 IsLoadingEnabled="{Binding IsBusy}"

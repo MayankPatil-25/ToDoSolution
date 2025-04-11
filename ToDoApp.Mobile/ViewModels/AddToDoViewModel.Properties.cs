@@ -16,6 +16,17 @@ public partial class AddToDoViewModel
         }
     }
     
+    private string _buttonSubmitTitle = string.Empty;
+    public string ButtonSubmitTitle
+    {
+        get => _buttonSubmitTitle;
+        set
+        {
+            _buttonSubmitTitle = value;
+            OnPropertyChanged(nameof(ButtonSubmitTitle));
+        }
+    }
+    
     private string _todoTitle = string.Empty;
     public string ToDoTitle
     {
@@ -38,7 +49,7 @@ public partial class AddToDoViewModel
         }
     }
 
-    private DateTime _minDate = DateTime.Now;
+    private DateTime _minDate = DateTime.Now.AddDays(1);
     public DateTime MinDate
     {
         get => _minDate;
@@ -68,7 +79,6 @@ public partial class AddToDoViewModel
         {
             _todoPriority = value;
             OnPropertyChanged(nameof(TodoPriority));
-            
         }
     }
     
@@ -80,6 +90,18 @@ public partial class AddToDoViewModel
         {
             _priorityItems = value;
             OnPropertyChanged(nameof(PriorityItems));
+        }
+    }
+
+    private int _toDoPickerSelectedIndex = 0;
+
+    public int ToDoPickerSelectedIndex
+    {
+        get => _toDoPickerSelectedIndex;
+        set
+        {
+            _toDoPickerSelectedIndex = value;
+            OnPropertyChanged(nameof(ToDoPickerSelectedIndex));
         }
     }
 }

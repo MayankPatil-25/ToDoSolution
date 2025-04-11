@@ -31,12 +31,12 @@ public static class MauiProgram
         builder.Services.AddSingleton<IToDoService, ToDoService>();
         
         // Registering Views/Pages
-        builder.Services.AddSingleton<ToDoListPage>();
+        builder.Services.AddTransient<ToDoListPage>();
         builder.Services.AddTransient<AddToDoPage>();
         
         // Registering ViewModels
         builder.Services.AddTransient<ToDoListViewModel>();
-        builder.Services.AddSingleton<AddToDoViewModel>();
+        builder.Services.AddTransient<AddToDoViewModel>();
         
         return builder.Build();
     }

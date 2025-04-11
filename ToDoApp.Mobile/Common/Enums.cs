@@ -6,3 +6,10 @@ public enum ToDoPriority
     Medium = 1,
     High = 2,
 }
+
+public enum ToDoFilter
+{
+    All = 0,
+    Completed = 1,
+    Pending = 2
+}
