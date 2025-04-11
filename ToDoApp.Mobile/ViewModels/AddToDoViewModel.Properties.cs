@@ -4,7 +4,6 @@ namespace ToDoApp.Mobile.ViewModels;
 
 public partial class AddToDoViewModel
 {
-    
     private string _pageTitle = string.Empty;
     public string PageTitle
     {

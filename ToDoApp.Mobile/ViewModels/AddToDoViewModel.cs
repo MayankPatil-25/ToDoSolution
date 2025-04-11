@@ -79,14 +79,14 @@ public partial class AddToDoViewModel : BaseViewModel
         if (_isUpdatePage)
         {
             return _selectedToDoItem.Update(ToDoTitle,
-                DueDate,
+                DueDate!.Value,
                 ToDoDescription,
                 TodoPriority!.Value);
         }
         
         return new ToDoItem(0,
             ToDoTitle,
-            DueDate,
+            DueDate!.Value,
             ToDoDescription,
             TodoPriority ?? ToDoPriority.Low);
     }

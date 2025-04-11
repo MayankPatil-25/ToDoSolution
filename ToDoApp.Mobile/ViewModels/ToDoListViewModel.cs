@@ -58,7 +58,7 @@ public partial class ToDoListViewModel: BaseViewModel
             OnPropertyChanged(nameof(FilterOptions));
         }
     }
-
+    
     private readonly IToDoService _service;
 
     public ToDoListViewModel(IToDoService service)
@@ -98,6 +98,13 @@ public partial class ToDoListViewModel: BaseViewModel
     }
     
     [RelayCommand]
+    private async Task ToDoItemSelected(ToDoItem item)
+    {
+        var page = new ToDoItemDetailPage(new ToDoItemDetailViewModel(item));
+        await PageInstance.Navigation.PushAsync(page, true);
+    }
+    
+    [RelayCommand]
     private async Task ToDoCompletionSwitchToggled(ToDoItem updatedItem)
     {
         IsBusy = true;
@@ -108,14 +115,6 @@ public partial class ToDoListViewModel: BaseViewModel
             : "Something went wrong while updating the ToDo item status.";
         await PageInstance.DisplaySnackbar(message);
         IsBusy = false;
-    }
-
-    private void NavigateToUpdateToDoItem(ToDoItem selectedItem)
-    {
-        var viewModel = App.Services?.GetRequiredService<AddToDoViewModel>();
-        if (viewModel == null) return;
-        viewModel.NavigateData(selectedItem);
-        PageInstance.Navigation.PushAsync(new AddToDoPage(viewModel));
     }
 
     [RelayCommand]
@@ -144,6 +143,14 @@ public partial class ToDoListViewModel: BaseViewModel
         var list = await _service.GetAllToDoAsync();
         ToDoListMaster = list ?? new List<ToDoItem>();
         FilterMasterList(SelectedFilter);
+    }
+    
+    private void NavigateToUpdateToDoItem(ToDoItem selectedItem)
+    {
+        var viewModel = App.Services?.GetRequiredService<AddToDoViewModel>();
+        if (viewModel == null) return;
+        viewModel.NavigateData(selectedItem);
+        PageInstance.Navigation.PushAsync(new AddToDoPage(viewModel));
     }
 
     private async Task DeleteItemAsync(ToDoItem selectedItem)

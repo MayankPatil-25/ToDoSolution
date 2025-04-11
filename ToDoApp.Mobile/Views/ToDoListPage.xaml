@@ -16,7 +16,6 @@
                     BackgroundColor="{DynamicResource PrimaryFpTheme}"
                     Grid.Row="0">
                     <Label
-                        Grid.Column="0"
                         Text="Todo List"
                         FontSize="26"
                         FontAttributes="Bold"
@@ -47,8 +46,10 @@
                     RefreshColor="{DynamicResource PrimaryFpTheme}">
                     <CollectionView
                         x:Name="CollectionViewToDoList"
-                        SelectionMode="None"
-                        ItemsSource="{Binding ToDoList}">
+                        SelectionMode="Single"
+                        ItemsSource="{Binding ToDoList}"
+                        SelectionChangedCommand="{Binding ToDoItemSelectedCommand}"
+                        SelectionChangedCommandParameter="{Binding Source={x:Reference CollectionViewToDoList}, Path=SelectedItem}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:ToDoItem">
                                 <ContentView
