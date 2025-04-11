@@ -33,6 +33,7 @@ public partial class ToDoListViewModel: BaseViewModel
     }
 
     private readonly IToDoService _service;
+
     public ToDoListViewModel(IToDoService service)
     {
         _service = service;
@@ -40,45 +41,70 @@ public partial class ToDoListViewModel: BaseViewModel
 
     protected override void OnAppearing()
     {
-        HasNavigationBar = false;
         Task.Run(RefreshToDoList);
     }
-
-    protected override void OnDisappearing()
-    {
-        
-    }
     
+    [RelayCommand]
+    private void AddToDo()
+    {
+        Navigate<AddToDoPage>();
+    }
+
+    [RelayCommand]
+    private async Task ToDoItemLongPress(ToDoItem selectedItem)
+    {
+        var result = await PageInstance.DisplayActionSheet("Please select an action for the selected item?",
+            "Cancel",
+            "Skip",
+            ["Edit", "Delete"]) ?? "";
+
+        if (result == "Edit")
+        {
+            NavigateToUpdateToDoItem(selectedItem);
+        }
+        else if (result == "Delete")
+        {
+            await DeleteItemAsync(selectedItem);
+        }
+    }
+
+    private void NavigateToUpdateToDoItem(ToDoItem selectedItem)
+    {
+        var viewModel = App.Services?.GetRequiredService<AddToDoViewModel>();
+        if (viewModel != null)
+        {
+            viewModel.NavigateData(selectedItem);
+            PageInstance.Navigation.PushAsync(new AddToDoPage(viewModel));
+        }
+    }
+
     [RelayCommand]
     private async Task RefreshToDoList()
     {
         IsBusy = true;
 
         var list = await _service.GetAllToDoAsync();
-
         ToDoList = new(list);
-        
-        // ToDoList = [
-        //     new ToDoItem(1, "Pick Up Santosh",  DateTime.Today, priority: ToDoPriority.High),
-        //     new ToDoItem(2, "Finalise SDK Update docs", DateTime.Today, priority:ToDoPriority.High),
-        //     new ToDoItem(3, "Complete Pull request change request", DateTime.Today, priority:ToDoPriority.High),
-        //     new ToDoItem(4, "Family Dinner", DateTime.Today, priority:ToDoPriority.Medium),
-        //     new ToDoItem(5, "Weekend with friend", DateTime.Today, priority:ToDoPriority.Low),
-        //     new ToDoItem(6, "Groceries & Shopping on Weekend", DateTime.Today,priority: ToDoPriority.Low),
-        //     new ToDoItem(7, "SetUp Laptop with .NET 9", DateTime.Today, priority:ToDoPriority.Medium),
-        //     new ToDoItem(8, "Drop Santosh at HBF", DateTime.Today, priority:ToDoPriority.High),
-        //     new ToDoItem(9, "Complete Assignment ", DateTime.Today, priority:ToDoPriority.High),
-        //     new ToDoItem(10, "Assignment Docs", DateTime.Today, priority:ToDoPriority.High),
-        //     new ToDoItem(11, "Email Assignment", DateTime.Today, priority:ToDoPriority.High)
-        // ];
         
         IsRefreshing = false;
         IsBusy = false;
     }
 
-    [RelayCommand]
-    private void AddToDo()
+    private async Task DeleteItemAsync(ToDoItem selectedItem)
     {
-        Navigate<AddToDoPage>();
+        IsBusy = true;
+
+        var deleted = await _service.DeleteToDoAsync(selectedItem.Id);
+        if (deleted)
+        {
+            ToDoList.Remove(selectedItem);
+        }
+        else
+        {
+            await DisplayPopup("Alert","Something went wrong while deleting the ToDo item.");
+        }
+        
+        IsRefreshing = false;
+        IsBusy = false;
     }
 }

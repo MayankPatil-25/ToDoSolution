@@ -6,6 +6,7 @@
                        xmlns:pages="clr-namespace:ToDoApp.Mobile.Views"
                        xmlns:controls="clr-namespace:ToDoApp.Mobile.Controls"
                        xmlns:models="clr-namespace:ToDoApp.Mobile.Models"
+                       xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                        x:Class="ToDoApp.Mobile.Views.ToDoListPage"
                        x:DataType="viewmodels:ToDoListViewModel">
     <pages:BaseContentPage.Content>
@@ -22,13 +23,22 @@
                         Padding="10,5"
                         VerticalTextAlignment="Center"
                         TextColor="WhiteSmoke" />
-                    <ImageButton
+                    <Button
                         Margin="10,5"
                         BackgroundColor="WhiteSmoke"
                         VerticalOptions="Center"
                         HorizontalOptions="End"
-                        CornerRadius="20"
-                        Command="{Binding AddToDoCommand}" />
+                        HeightRequest="30"
+                        WidthRequest="30"
+                        CornerRadius="25"
+                        Command="{Binding AddToDoCommand}">
+                        <Button.ImageSource>
+                            <FontImageSource Glyph="+"
+                                             FontFamily="MaterialIcons"
+                                             Size="34"
+                                             Color="Black" />
+                        </Button.ImageSource>
+                    </Button>
                 </Grid>
                 <RefreshView
                     Grid.Row="1"
@@ -44,24 +54,51 @@
                                 <ContentView
                                     BackgroundColor="WhiteSmoke"
                                     Padding="9">
-                                    <Grid
-                                        Padding="9"
-                                        ColumnDefinitions="9*,1*"
-                                        BackgroundColor="White">
-                                        <VerticalStackLayout
-                                            Grid.Column="0">
-                                            <Label Text="{Binding Title}" FontSize="16" />
-                                            <Label Text="{Binding DisplayCreatedAtDate}" FontSize="12"
-                                                   FontAttributes="Italic" />
-                                            <Label Text="{Binding DisplayPriority}" FontSize="12" FontAttributes="Bold" />
-                                        </VerticalStackLayout>
-                                        <Switch
-                                            Grid.Column="1"
-                                            IsToggled="True"
-                                            OnColor="{DynamicResource PrimaryFpTheme}"
-                                            ThumbColor="Gray" />
+                                    <Border
+  
+                                            StrokeShape="RoundRectangle 5">
+                                        <Grid
+                                            IsClippedToBounds="True"
+                                            ColumnDefinitions="25,*,Auto"
+                                            BackgroundColor="White">
+                                            <Grid.Behaviors>
+                                                <toolkit:TouchBehavior
+                                                    LongPressCommand="{Binding Source={x:Reference CollectionViewToDoList}, Path=BindingContext.ToDoItemLongPressCommand}"
+                                                    LongPressCommandParameter="{Binding}" />
+                                            </Grid.Behaviors>
+                                            <BoxView
+                                                Grid.Column="0"
+                                                BackgroundColor="{Binding PriorityIndicator}" />
+                                            <VerticalStackLayout
+                                                Grid.Column="1"
+                                                Spacing="5"
+                                                Padding="9">
+                                                <Label Text="{Binding Title}"
+                                                       FontSize="16" />
+                                                <Label Text="{Binding Description}"
+                                                       FontSize="13" />
+                                                <Grid>
+                                                    <Label Text="{Binding DisplayPriority}"
+                                                           FontSize="11"
+                                                           FontAttributes="Bold"
+                                                           HorizontalTextAlignment="Start"
+                                                           HorizontalOptions="Start" />
+                                                    <Label Text="{Binding DisplayCreatedAtDate}"
+                                                           FontSize="11"
+                                                           FontAttributes="Italic"
+                                                           HorizontalOptions="End"
+                                                           HorizontalTextAlignment="End"/>
+                                                </Grid>
+                                            </VerticalStackLayout>
+                                            <Switch
+                                                Margin="0,0,9,0"
+                                                Grid.Column="2"
+                                                IsToggled="True"
+                                                OnColor="{DynamicResource PrimaryFpTheme}"
+                                                ThumbColor="Gray" />
 
-                                    </Grid>
+                                        </Grid>
+                                    </Border>
                                 </ContentView>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>

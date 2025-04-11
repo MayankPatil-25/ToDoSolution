@@ -4,6 +4,18 @@ namespace ToDoApp.Mobile.ViewModels;
 
 public partial class AddToDoViewModel
 {
+    
+    private string _pageTitle = string.Empty;
+    public string PageTitle
+    {
+        get => _pageTitle;
+        set
+        {
+            _pageTitle = value;
+            OnPropertyChanged(nameof(PageTitle));
+        }
+    }
+    
     private string _todoTitle = string.Empty;
     public string ToDoTitle
     {
@@ -20,7 +32,7 @@ public partial class AddToDoViewModel
     {
         get => _todoDescription;
         set
-        {
+        { 
             _todoDescription = value;
             OnPropertyChanged(nameof(ToDoDescription));
         }
