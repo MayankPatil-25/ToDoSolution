@@ -13,7 +13,7 @@
             BackgroundColor="{DynamicResource PrimaryFpTheme}"
             Grid.Row="0">
             <Label
-                Text="Todo List"
+                Text="{Binding PageTitle}"
                 FontSize="26"
                 FontAttributes="Bold"
                 Padding="10,5"

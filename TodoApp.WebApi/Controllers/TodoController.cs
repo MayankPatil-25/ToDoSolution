@@ -17,12 +17,12 @@ namespace TodoApp.WebApi.Controllers
 
         [HttpPost]
         public async Task<ActionResult<ToDoItem>> CreateToDoItemAsync(ToDoItem item)
-        {   
+        {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var todoItemResult = await _service.CreateToDoItemAsync(item);
-            return CreatedAtAction(actionName: nameof(GetToDoItemAsync),
+            return CreatedAtAction(actionName: "CreateToDoItem",
                 routeValues: new { id = todoItemResult.Id },
                 value: todoItemResult);
         }
@@ -39,7 +39,7 @@ namespace TodoApp.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
+
             var item = await _service.GetToDoItemAsync(id);
             if (item == null)
             {
@@ -60,6 +60,7 @@ namespace TodoApp.WebApi.Controllers
             {
                 return NotFound();
             }
+
             return Ok(updatedTodoItem);
         }
 
@@ -68,12 +69,13 @@ namespace TodoApp.WebApi.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-    
+
             var deleted = await _service.DeleteToDoItemAsync(id);
             if (!deleted)
             {
                 return NotFound();
             }
+
             return NoContent();
         }
     }
