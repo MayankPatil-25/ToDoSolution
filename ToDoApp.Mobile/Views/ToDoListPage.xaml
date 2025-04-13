@@ -92,7 +92,7 @@
                                                            FontAttributes="Bold"
                                                            HorizontalTextAlignment="Start"
                                                            HorizontalOptions="Start" />
-                                                    <Label Text="{Binding DisplayCreatedAtDate}"
+                                                    <Label Text="{Binding DisplayDueDate}"
                                                            FontSize="11"
                                                            FontAttributes="Italic"
                                                            HorizontalOptions="End"
