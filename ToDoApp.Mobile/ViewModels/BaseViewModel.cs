@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Java.Util.Concurrent;
 
 namespace ToDoApp.Mobile.ViewModels;
 
@@ -9,7 +8,7 @@ public partial class BaseViewModel: INotifyPropertyChanged
     /// <summary>
     /// Common getter for Page object.
     /// </summary>
-    protected Page PageInstance => App.Current?.MainPage;
+    protected Page? CurrentPage => Application.Current?.Windows.FirstOrDefault()?.Page;
     
     /// <summary>
     /// This should enable/disable the navigation bar on the page if binding is set.
@@ -70,13 +69,14 @@ public partial class BaseViewModel: INotifyPropertyChanged
 
     protected async Task DisplayPopup(string title, string message, string button = "Ok")
     {
-       await PageInstance.DisplayAlert(title, message, button);
+        if (CurrentPage == null) return;
+        await CurrentPage.DisplayAlert(title, message, button);
     }
 
     protected Task Navigate<TPage>() where TPage : ContentPage
     {
         var page = App.Services?.GetRequiredService<TPage>();
-        if (page == null) return Task.CompletedTask;
-        return PageInstance.Navigation.PushAsync(page, true);
+        if (page == null || CurrentPage == null) return Task.CompletedTask;
+        return CurrentPage.Navigation.PushAsync(page, true);
     }
 }

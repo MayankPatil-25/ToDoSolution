@@ -9,20 +9,20 @@ public partial class AddToDoViewModel : BaseViewModel
 {
     private readonly IToDoService _service;
     private bool _isUpdatePage;
-    private ToDoItem _selectedToDoItem;
+    private ToDoItem? _selectedToDoItem;
 
     public AddToDoViewModel(IToDoService service)
     {
         _service = service;
-        PriorityItems = Enum.GetValues(typeof(ToDoPriority)).Cast<ToDoPriority>().ToList();
-        PageTitle = "Add ToDo";
+        _priorityItems = Enum.GetValues(typeof(ToDoPriority)).Cast<ToDoPriority>().ToList();
+        PageTitle = "Add Todo";
         ButtonSubmitTitle = "Submit";
         DueDate = MinDate;
     }
 
     public void NavigateData(ToDoItem selectedItem)
     {
-        PageTitle = "Update ToDo";
+        PageTitle = "Update Todo";
         ButtonSubmitTitle = "Update";
         _isUpdatePage = true;
         _selectedToDoItem = selectedItem;
@@ -51,7 +51,7 @@ public partial class AddToDoViewModel : BaseViewModel
             return;
         }
 
-        var isUpdateSuccess = false;
+        bool isUpdateSuccess;
         var todoItem = GetTodoItem();
         
         if (_isUpdatePage)
@@ -65,12 +65,13 @@ public partial class AddToDoViewModel : BaseViewModel
 
         if (isUpdateSuccess)
         {
-            await DisplayPopup("Success!", "The ToDo item was saved successfully.");
-            await PageInstance.Navigation.PopAsync(true);
+            await DisplayPopup("Success!", "The Todo item was saved successfully.");
+            if (CurrentPage == null) return;
+            await CurrentPage.Navigation.PopAsync(true);
         }
         else
         {
-            await DisplayPopup("Error!", "Unfortunately something went wrong. Unable to save the ToDo item.");
+            await DisplayPopup("Error!", "Unfortunately something went wrong. Unable to save the Todo item.");
         }
     }
 
@@ -78,15 +79,15 @@ public partial class AddToDoViewModel : BaseViewModel
     {
         if (_isUpdatePage)
         {
-            return _selectedToDoItem.Update(ToDoTitle,
-                DueDate,
+            return _selectedToDoItem!.Update(ToDoTitle,
+                DueDate!.Value,
                 ToDoDescription,
                 TodoPriority!.Value);
         }
         
         return new ToDoItem(0,
             ToDoTitle,
-            DueDate,
+            DueDate!.Value,
             ToDoDescription,
             TodoPriority ?? ToDoPriority.Low);
     }
@@ -122,6 +123,9 @@ public partial class AddToDoViewModel : BaseViewModel
 
     private bool IsItemUpdated()
     {
+        if (_selectedToDoItem == null)
+            return false;
+        
         var isUpdated = _selectedToDoItem.Description != ToDoDescription.Trim()
                         || _selectedToDoItem.Title != ToDoTitle.Trim()
                         || _selectedToDoItem.Priority != TodoPriority

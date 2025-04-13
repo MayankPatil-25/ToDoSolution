@@ -1,12 +1,10 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using ToDoApp.Mobile.Views;
+﻿using ToDoApp.Mobile.Views;
 
 namespace ToDoApp.Mobile;
 
-public partial class App : Application
+public partial class App
 {
-    public static IServiceProvider Services { get; private set; }
+    public static IServiceProvider? Services { get; private set; }
 
     public App(IServiceProvider services)
     {
@@ -16,7 +14,7 @@ public partial class App : Application
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
-        var page = Services.GetRequiredService<ToDoListPage>();
+        var page = Services?.GetRequiredService<ToDoListPage>();
         return new Window(new NavigationPage(page));
     }
 }

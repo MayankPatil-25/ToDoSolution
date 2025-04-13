@@ -1,6 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using Android.Widget;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.Input;
@@ -58,13 +56,13 @@ public partial class ToDoListViewModel: BaseViewModel
             OnPropertyChanged(nameof(FilterOptions));
         }
     }
-
+    
     private readonly IToDoService _service;
 
     public ToDoListViewModel(IToDoService service)
     {
         _service = service;
-        FilterOptions = Enum.GetValues(typeof(ToDoFilter)).Cast<ToDoFilter>().ToArray();
+        _filterOptions = Enum.GetValues(typeof(ToDoFilter)).Cast<ToDoFilter>().ToArray();
     }
 
     protected override void OnAppearing()
@@ -82,10 +80,12 @@ public partial class ToDoListViewModel: BaseViewModel
     [RelayCommand]
     private async Task ToDoItemLongPress(ToDoItem selectedItem)
     {
-        var result = await PageInstance.DisplayActionSheet("Please choose an action for the selected item.",
+        if (CurrentPage == null) return;
+        string[] options = selectedItem.IsCompleted ? ["Delete"] : ["Edit", "Delete"];
+        var result = await CurrentPage.DisplayActionSheet("Please choose an action for the selected item.",
             "Cancel",
             null,
-            ["Edit", "Delete"]) ?? "";
+            options) ?? "";
 
         if (result == "Edit")
         {
@@ -98,6 +98,15 @@ public partial class ToDoListViewModel: BaseViewModel
     }
     
     [RelayCommand]
+    private async Task ToDoItemSelected(ToDoItem item)
+    {
+        if (CurrentPage == null) return;
+        
+        var page = new ToDoItemDetailPage(new ToDoItemDetailViewModel(item));
+        await CurrentPage.Navigation.PushAsync(page, true);
+    }
+    
+    [RelayCommand]
     private async Task ToDoCompletionSwitchToggled(ToDoItem updatedItem)
     {
         IsBusy = true;
@@ -105,17 +114,9 @@ public partial class ToDoListViewModel: BaseViewModel
         var isUpdateSuccess = await _service.UpdateToDoAsync(updatedItem);
         var message = isUpdateSuccess
             ? "To do item status updated successfully."
-            : "Something went wrong while updating the ToDo item status.";
-        await PageInstance.DisplaySnackbar(message);
+            : "Something went wrong while updating the Todo item status.";
+        await CurrentPage.DisplaySnackbar(message);
         IsBusy = false;
-    }
-
-    private void NavigateToUpdateToDoItem(ToDoItem selectedItem)
-    {
-        var viewModel = App.Services?.GetRequiredService<AddToDoViewModel>();
-        if (viewModel == null) return;
-        viewModel.NavigateData(selectedItem);
-        PageInstance.Navigation.PushAsync(new AddToDoPage(viewModel));
     }
 
     [RelayCommand]
@@ -142,8 +143,17 @@ public partial class ToDoListViewModel: BaseViewModel
     private async Task GetAllToDoItemsAsync()
     {
         var list = await _service.GetAllToDoAsync();
-        ToDoListMaster = list ?? new List<ToDoItem>();
+        ToDoListMaster = list;
         FilterMasterList(SelectedFilter);
+    }
+    
+    private void NavigateToUpdateToDoItem(ToDoItem selectedItem)
+    {
+        var viewModel = App.Services?.GetRequiredService<AddToDoViewModel>();
+        if (viewModel == null) return;
+        
+        viewModel.NavigateData(selectedItem);
+        CurrentPage?.Navigation?.PushAsync(new AddToDoPage(viewModel));
     }
 
     private async Task DeleteItemAsync(ToDoItem selectedItem)
@@ -157,7 +167,7 @@ public partial class ToDoListViewModel: BaseViewModel
         }
         else
         {
-            await DisplayPopup("Alert","Something went wrong while deleting the ToDo item.");
+            await DisplayPopup("Alert","Something went wrong while deleting the Todo item.");
         }
         
         IsRefreshing = false;
@@ -166,8 +176,6 @@ public partial class ToDoListViewModel: BaseViewModel
     
     private void FilterMasterList(ToDoFilter selectedFilter)
     {
-        if (ToDoListMaster == null) return;
-        
         switch (selectedFilter)
         {
             case ToDoFilter.All:

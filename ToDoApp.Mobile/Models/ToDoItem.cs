@@ -12,7 +12,7 @@ public class ToDoItem
         Description = string.Empty;
     }
 
-    public ToDoItem(int id, string title, DateTime? dueDate, string description = "", ToDoPriority priority = ToDoPriority.Low)
+    public ToDoItem(int id, string title, DateTime dueDate, string description = "", ToDoPriority priority = ToDoPriority.Low)
     {
         Id = id;
         DueDate = dueDate;
@@ -21,7 +21,7 @@ public class ToDoItem
         Description = description;
     }
     
-    public ToDoItem Update(string title, DateTime? dueDate, string description, ToDoPriority priority)
+    public ToDoItem Update(string title, DateTime dueDate, string description, ToDoPriority priority)
     {
         DueDate = dueDate;
         Priority = priority;
@@ -41,7 +41,7 @@ public class ToDoItem
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime? DueDate { get; set; }
+    public DateTime DueDate { get; set; } = DateTime.UtcNow;
     
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
@@ -50,6 +50,8 @@ public class ToDoItem
     public string DisplayPriority => $"{nameof(Priority)}: {Priority.ToString()}";
 
     public string DisplayCreatedAtDate => CreatedAt.ToString("D");
+
+    public string DisplayDueDate => DueDate.ToString("D");
 
     public string PriorityIndicator => Priority switch
     {

@@ -2,12 +2,12 @@
 
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:viewmodels="clr-namespace:ToDoApp.Mobile.ViewModels"
+                       xmlns:viewModels="clr-namespace:ToDoApp.Mobile.ViewModels"
                        xmlns:pages="clr-namespace:ToDoApp.Mobile.Views"
                        xmlns:controls="clr-namespace:ToDoApp.Mobile.Controls"
                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                        x:Class="ToDoApp.Mobile.Views.AddToDoPage"
-                       x:DataType="viewmodels:AddToDoViewModel">
+                       x:DataType="viewModels:AddToDoViewModel">
     <Grid RowDefinitions="1*,8*,1*">
         <Grid
             BackgroundColor="{DynamicResource PrimaryFpTheme}"
@@ -60,7 +60,7 @@
                     <toolkit:EventToCommandBehavior
                         EventName="DateSelected"
                         Command="{Binding DateSelectedCommand}"
-                        CommandParameter="{Binding Source={x:Reference PickerDueDate}, Path=Date}" />
+                        CommandParameter="{Binding DueDate}" />
                 </DatePicker.Behaviors>
             </DatePicker>
         </VerticalStackLayout>
