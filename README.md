@@ -7,7 +7,7 @@
 
 A .NET MAUI Android based Todo list management application, implementing MVVM design pattern with .NET Web API backend.
 
-![App Screenshot](docs/Todo\List.png)
+![Sample Todo List Screenshot](https://github.com/MayankPatil-25/ToDoSolution/blob/add-read-me/docs/Todo%20List.png)
 
 ## ✨ App Features
 
