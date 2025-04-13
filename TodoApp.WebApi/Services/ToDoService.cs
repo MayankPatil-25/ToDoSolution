@@ -3,7 +3,7 @@ using TodoApp.WebApi.Repositories;
 
 namespace TodoApp.WebApi.Services;
 
-internal class ToDoService: IToDoService
+public class ToDoService: IToDoService
 {
     private readonly IToDoRepository _todoRepository;
 

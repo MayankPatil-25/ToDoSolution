@@ -5,7 +5,7 @@ namespace ToDoApp.Mobile.Services;
 
 public class ToDoService: IToDoService
 {
-    private const string BaseUrl = "http://10.0.2.2:5270/api/todo";
+    private const string baseUrl = "http://10.0.2.2:5270/api/todo";
     private readonly HttpClient _httpClient;
     
     public ToDoService(HttpClient httpClient)
@@ -17,7 +17,7 @@ public class ToDoService: IToDoService
     {
         try
         {
-            var response = await _httpClient.GetFromJsonAsync<List<ToDoItem>>(BaseUrl) ?? new List<ToDoItem>();
+            var response = await _httpClient.GetFromJsonAsync<List<ToDoItem>>(baseUrl) ?? new List<ToDoItem>();
             return response;
         }
         catch (HttpRequestException)
@@ -30,7 +30,7 @@ public class ToDoService: IToDoService
     {
         try
         {
-            return await _httpClient.GetFromJsonAsync<ToDoItem>($"{BaseUrl}/{id}");
+            return await _httpClient.GetFromJsonAsync<ToDoItem>($"{baseUrl}/{id}");
         }
         catch (HttpRequestException)
         {
@@ -42,7 +42,7 @@ public class ToDoService: IToDoService
     {
         try
         {
-            var response = await _httpClient.PostAsJsonAsync(BaseUrl, item);
+            var response = await _httpClient.PostAsJsonAsync(baseUrl, item);
             return response.IsSuccessStatusCode;
         }
         catch (HttpRequestException)
@@ -55,7 +55,7 @@ public class ToDoService: IToDoService
     {
         try
         {
-            var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{item.Id}", item);
+            var response = await _httpClient.PutAsJsonAsync($"{baseUrl}/{item.Id}", item);
             return response.IsSuccessStatusCode;
         }
         catch (HttpRequestException)
@@ -68,7 +68,7 @@ public class ToDoService: IToDoService
     {
         try
         {
-            var response = await _httpClient.DeleteAsync($"{BaseUrl}/{id}");
+            var response = await _httpClient.DeleteAsync($"{baseUrl}/{id}");
             return response.IsSuccessStatusCode;
         }
         catch (HttpRequestException)

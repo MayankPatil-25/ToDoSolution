@@ -22,8 +22,7 @@ namespace TodoApp.WebApi.Controllers
                 return BadRequest(ModelState);
 
             var todoItemResult = await _service.CreateToDoItemAsync(item);
-            return CreatedAtAction(actionName: "CreateToDoItem",
-                routeValues: new { id = todoItemResult.Id },
+            return CreatedAtAction(actionName: "CreateToDoItem", routeValues: new { id = todoItemResult.Id },
                 value: todoItemResult);
         }
 
@@ -67,9 +66,6 @@ namespace TodoApp.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteToDoItemAsync(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             var deleted = await _service.DeleteToDoItemAsync(id);
             if (!deleted)
             {

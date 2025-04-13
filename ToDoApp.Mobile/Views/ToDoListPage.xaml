@@ -2,13 +2,13 @@
 
 <pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:viewmodels="clr-namespace:ToDoApp.Mobile.ViewModels"
+                       xmlns:viewModels="clr-namespace:ToDoApp.Mobile.ViewModels"
                        xmlns:pages="clr-namespace:ToDoApp.Mobile.Views"
                        xmlns:controls="clr-namespace:ToDoApp.Mobile.Controls"
                        xmlns:models="clr-namespace:ToDoApp.Mobile.Models"
                        xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                        x:Class="ToDoApp.Mobile.Views.ToDoListPage"
-                       x:DataType="viewmodels:ToDoListViewModel">
+                       x:DataType="viewModels:ToDoListViewModel">
     <pages:BaseContentPage.Content>
         <Grid>
             <Grid RowDefinitions="1*,8.5*,0.5*">
@@ -22,22 +22,17 @@
                         Padding="10,5"
                         VerticalTextAlignment="Center"
                         TextColor="WhiteSmoke" />
-                    <Button
-                        Margin="10,5"
+                    <ImageButton
+                        Source="plusicon"
+                        Margin="5,5,10,5"
                         BackgroundColor="WhiteSmoke"
                         VerticalOptions="Center"
                         HorizontalOptions="End"
-                        HeightRequest="30"
-                        WidthRequest="30"
-                        CornerRadius="25"
-                        Command="{Binding AddToDoCommand}">
-                        <Button.ImageSource>
-                            <FontImageSource Glyph="+"
-                                             FontFamily="MaterialIcons"
-                                             Size="34"
-                                             Color="Black" />
-                        </Button.ImageSource>
-                    </Button>
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        CornerRadius="30"
+                        Aspect="Center"
+                        Command="{Binding AddToDoCommand}" />
                 </Grid>
                 <RefreshView
                     Grid.Row="1"
@@ -46,10 +41,8 @@
                     RefreshColor="{DynamicResource PrimaryFpTheme}">
                     <CollectionView
                         x:Name="CollectionViewToDoList"
-                        SelectionMode="Single"
-                        ItemsSource="{Binding ToDoList}"
-                        SelectionChangedCommand="{Binding ToDoItemSelectedCommand}"
-                        SelectionChangedCommandParameter="{Binding Source={x:Reference CollectionViewToDoList}, Path=SelectedItem}">
+                        SelectionMode="None"
+                        ItemsSource="{Binding ToDoList}" >
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:ToDoItem">
                                 <ContentView
@@ -64,6 +57,8 @@
                                             BackgroundColor="White">
                                             <Grid.Behaviors>
                                                 <toolkit:TouchBehavior
+                                                    Command="{Binding Source={x:Reference CollectionViewToDoList}, Path=BindingContext.ToDoItemSelectedCommand}"
+                                                    CommandParameter="{Binding}"
                                                     LongPressCommand="{Binding Source={x:Reference CollectionViewToDoList}, Path=BindingContext.ToDoItemLongPressCommand}"
                                                     LongPressCommandParameter="{Binding}"
                                                     ShouldMakeChildrenInputTransparent="False"
@@ -151,7 +146,7 @@
                                 <toolkit:EventToCommandBehavior 
                                     EventName="SelectedIndexChanged"
                                     Command="{Binding FilterToDoListCommand}"
-                                    CommandParameter="{Binding Source={x:Reference PickerFilters}, Path=SelectedIndex}" />
+                                    CommandParameter="{Binding Path=SelectedIndex, Source={x:Reference PickerFilters}}" />
                             </Picker.Behaviors>
                         </Picker>
                     </HorizontalStackLayout>
